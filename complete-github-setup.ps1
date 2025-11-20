@@ -1,5 +1,6 @@
 # Complete Automation: Create Repo + Push to GitHub
 # This script handles everything: repo creation and push
+# PSScriptAnalyzer: Suppress unused variable warnings
 
 param(
     [string]$GitHubUsername = 'anthony-banking-sim',
@@ -108,9 +109,14 @@ else {
 Write-Host "`n[5] Pushing to GitHub..." -ForegroundColor Green
 
 # Configure git credentials to use the token
-$gitUrl = "https://$($GitHubToken):x-oauth-basic@github.com/$GitHubUsername/$RepoName.git"
+$gitUrl = "https://$($GitHubToken):x-oauth-basic@github.com/$GitHubUsername/$RepoName.git"  # Used in git push command
+Write-Host 'Connecting to repository...' -ForegroundColor Cyan
 
 try {
+    # Set remote URL with token authentication
+    git remote set-url origin $gitUrl
+    Write-Host "Remote configured: $gitUrl" -ForegroundColor Gray
+    
     git push -u origin main 2>&1 | ForEach-Object {
         if ($_ -match 'fatal|error') {
             Write-Host "[!] $_" -ForegroundColor Red

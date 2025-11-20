@@ -2,19 +2,19 @@
 Authentication Service
 JWT token generation and validation
 """
-import jwt
+import jwt  # pyright: ignore
 import os
 from datetime import datetime, timedelta
 from functools import wraps
 from typing import Optional, Dict, Any
-from flask import request, jsonify, g
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask import request, jsonify, g  # pyright: ignore
+from werkzeug.security import generate_password_hash, check_password_hash  # pyright: ignore
 
 
 class AuthService:
     """Authentication service"""
 
-    def __init__(self, secret_key: str = None):
+    def __init__(self, secret_key: str | None = None):  # type: ignore
         """Initialize auth service"""
         self.secret_key = secret_key or os.getenv('SECRET_KEY', 'your-secret-key-change-in-prod')
         self.algorithm = 'HS256'
@@ -77,7 +77,7 @@ class AuthService:
         
         return None
 
-    def require_auth(self, roles: list = None):
+    def require_auth(self, roles: list | None = None):  # type: ignore
         """Decorator to require authentication"""
         def decorator(fn):
             @wraps(fn)

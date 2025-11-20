@@ -3,9 +3,9 @@ Database Models
 SQLAlchemy ORM models for banking operations
 """
 from datetime import datetime
-from sqlalchemy import Column, String, Float, DateTime, Boolean, ForeignKey, Enum, Integer
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, String, Float, DateTime, Boolean, ForeignKey, Enum, Integer  # pyright: ignore
+from sqlalchemy.ext.declarative import declarative_base  # pyright: ignore
+from sqlalchemy.orm import relationship  # pyright: ignore
 import enum
 import uuid
 

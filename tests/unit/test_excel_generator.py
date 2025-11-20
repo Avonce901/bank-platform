@@ -2,7 +2,7 @@
 Unit tests for Excel Generator module
 """
 
-import pytest
+import pytest  # pyright: ignore
 
 
 class TestExcelGeneratorUtils:

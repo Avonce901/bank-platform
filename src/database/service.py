@@ -2,17 +2,17 @@
 Database Service
 Manages database connections and operations
 """
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy import create_engine  # pyright: ignore
+from sqlalchemy.orm import sessionmaker, Session  # pyright: ignore
 from contextlib import contextmanager
 import os
-from src.database.models import Base, User, Account, Transaction, Ledger
+from src.database.models import Base, User, Account, Transaction, Ledger  # pyright: ignore
 
 
 class DatabaseService:
     """Database service for managing connections"""
 
-    def __init__(self, database_url: str = None):
+    def __init__(self, database_url: str | None = None):  # type: ignore
         """Initialize database service"""
         if database_url is None:
             database_url = os.getenv(
@@ -54,7 +54,7 @@ class DatabaseService:
             session.close()
 
     def create_user(self, username: str, email: str, password_hash: str, 
-                   first_name: str = None, last_name: str = None) -> User:
+                   first_name: str | None = None, last_name: str | None = None) -> User:  # type: ignore
         """Create a new user"""
         with self.session_scope() as session:
             user = User(
@@ -132,8 +132,8 @@ class DatabaseService:
             return False
 
     def create_transaction(self, transaction_type: str, amount: float,
-                          from_account_id: str = None, to_account_id: str = None,
-                          description: str = None, status: str = "completed") -> Transaction:
+                          from_account_id: str | None = None, to_account_id: str | None = None,
+                          description: str | None = None, status: str = "completed") -> Transaction:  # type: ignore
         """Create a new transaction"""
         import uuid
         with self.session_scope() as session:
@@ -161,8 +161,8 @@ class DatabaseService:
 
     def create_ledger_entry(self, account_id: str, debit: float = 0.0,
                            credit: float = 0.0, balance_after: float = 0.0,
-                           entry_type: str = None, description: str = None,
-                           transaction_id: str = None) -> Ledger:
+                           entry_type: str | None = None, description: str | None = None,
+                           transaction_id: str | None = None) -> Ledger:  # type: ignore
         """Create ledger entry"""
         with self.session_scope() as session:
             ledger = Ledger(

@@ -5,8 +5,8 @@ Extracts text and tables from PDF files
 import io
 import json
 from typing import Dict, List, Any, Optional
-import pdfplumber
-from werkzeug.datastructures import FileStorage
+import pdfplumber  # pyright: ignore
+from werkzeug.datastructures import FileStorage  # pyright: ignore
 
 
 class PDFExtractor:

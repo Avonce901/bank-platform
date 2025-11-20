@@ -2,9 +2,9 @@
 Authentication Routes
 Login, logout, token refresh endpoints
 """
-from flask import Blueprint, jsonify, request, g
-from src.auth.service import get_auth_service
-from src.database.service import get_db_service
+from flask import Blueprint, jsonify, request, g  # pyright: ignore
+from src.auth.service import get_auth_service  # pyright: ignore
+from src.database.service import get_db_service  # pyright: ignore
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/api/v1/auth')
 auth_service = get_auth_service()

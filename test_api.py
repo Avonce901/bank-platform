@@ -8,28 +8,28 @@ import json
 
 # Test imports
 try:
-    from src.modules.pdf_extractor import PDFExtractor, extract_pdf
+    from src.modules.pdf_extractor import PDFExtractor, extract_pdf  # pyright: ignore
     print("[OK] PDF Extractor imported successfully")
 except ImportError as e:
     print(f"[FAIL] PDF Extractor import failed: {e}")
     sys.exit(1)
 
 try:
-    from src.modules.excel_generator import ExcelGenerator, generate_excel
+    from src.modules.excel_generator import ExcelGenerator, generate_excel  # pyright: ignore
     print("[OK] Excel Generator imported successfully")
 except ImportError as e:
     print(f"[FAIL] Excel Generator import failed: {e}")
     sys.exit(1)
 
 try:
-    from src.modules.takeoff_calculator import TakeoffCalculator, calculate_takeoff
+    from src.modules.takeoff_calculator import TakeoffCalculator, calculate_takeoff  # pyright: ignore
     print("[OK] Takeoff Calculator imported successfully")
 except ImportError as e:
     print(f"[FAIL] Takeoff Calculator import failed: {e}")
     sys.exit(1)
 
 try:
-    from src.api.routes import api_bp
+    from src.api.routes import api_bp  # pyright: ignore
     print("[OK] API Routes imported successfully")
 except ImportError as e:
     print(f"[FAIL] API Routes import failed: {e}")

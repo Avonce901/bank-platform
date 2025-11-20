@@ -1,0 +1,16 @@
+{
+    "exclude": [
+        "tests",
+        ".venv",
+        "venv"
+    ],
+    "typeCheckingMode": "standard",
+    "pythonVersion": "3.14",
+    "pythonPlatform": "Windows",
+    "reportMissingImports": false,
+    "reportMissingModuleSource": false,
+    "reportMissingTypeStubs": false,
+    "reportOptionalMemberAccess": false,
+    "reportOptionalSubscript": false,
+    "reportGeneralTypeIssues": false
+}

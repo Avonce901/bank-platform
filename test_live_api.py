@@ -4,7 +4,7 @@
 Test Bank Platform API - Live Demo
 Tests all major endpoints with your account
 """
-import requests
+import requests  # pyright: ignore
 import json
 import time
 

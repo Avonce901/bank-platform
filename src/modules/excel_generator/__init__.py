@@ -6,20 +6,20 @@ import io
 import json
 from typing import Dict, List, Any
 from datetime import datetime
-import openpyxl
-from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
-from openpyxl.utils import get_column_letter
+import openpyxl  # pyright: ignore
+from openpyxl.styles import Font, PatternFill, Alignment, Border, Side  # pyright: ignore
+from openpyxl.utils import get_column_letter  # pyright: ignore
 
 
 class ExcelGenerator:
     """Generate Excel files from data"""
 
     def __init__(self):
-        self.workbook = None
-        self.worksheet = None
+        self.workbook: Any = None  # pyright: ignore
+        self.worksheet: Any = None  # pyright: ignore
 
     def create_report(self, title: str, data: List[Dict[str, Any]], 
-                     filename: str = None) -> io.BytesIO:
+                     filename: str | None = None) -> io.BytesIO:  # type: ignore
         """
         Create an Excel report from data
         

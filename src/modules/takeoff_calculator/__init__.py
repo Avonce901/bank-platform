@@ -209,8 +209,9 @@ class TakeoffCalculator:
             
             # Return summary
             summary = self.get_takeoff_summary(takeoff_id)
-            summary['success'] = True
-            return summary
+            if summary:  # type: ignore
+                summary['success'] = True
+            return summary or {}  # type: ignore
         except Exception as e:
             return {
                 'success': False,

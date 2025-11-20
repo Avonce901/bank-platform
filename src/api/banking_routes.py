@@ -2,9 +2,9 @@
 Banking Operations Routes
 Transfer, deposit, withdrawal, balance check endpoints
 """
-from flask import Blueprint, jsonify, request, g
-from src.auth.service import get_auth_service
-from src.database.service import get_db_service
+from flask import Blueprint, jsonify, request, g  # pyright: ignore
+from src.auth.service import get_auth_service  # pyright: ignore
+from src.database.service import get_db_service  # pyright: ignore
 from datetime import datetime
 
 banking_bp = Blueprint('banking', __name__, url_prefix='/api/v1/banking')

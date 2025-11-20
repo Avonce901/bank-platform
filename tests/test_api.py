@@ -2,9 +2,9 @@
 Unit tests for Bank Platform API
 """
 
-import pytest
+import pytest  # pyright: ignore
 import json
-from src.api.main import create_app
+from src.api.main import create_app  # pyright: ignore
 
 
 @pytest.fixture

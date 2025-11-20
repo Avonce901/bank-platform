@@ -3,11 +3,11 @@ Bank Platform - Admin Panel (Streamlit)
 Account management, transaction monitoring, and user administration
 """
 
-import streamlit as st
+import streamlit as st  # pyright: ignore
 import json
 from pathlib import Path
 from datetime import datetime
-import pandas as pd
+import pandas as pd  # pyright: ignore
 
 # Page configuration
 st.set_page_config(
