@@ -142,6 +142,12 @@ def health_check():
         'version': '1.0.0'
     }), 200
 
+# Import new blueprints
+from src.api.auth_routes import auth_bp
+from src.api.banking_routes import banking_bp
+
 def register_routes(app):
     """Register all API blueprints"""
     app.register_blueprint(api_bp)
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(banking_bp)

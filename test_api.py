@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """
 Test script to verify API implementation
 """
@@ -8,30 +9,30 @@ import json
 # Test imports
 try:
     from src.modules.pdf_extractor import PDFExtractor, extract_pdf
-    print("✓ PDF Extractor imported successfully")
+    print("[OK] PDF Extractor imported successfully")
 except ImportError as e:
-    print(f"✗ PDF Extractor import failed: {e}")
+    print(f"[FAIL] PDF Extractor import failed: {e}")
     sys.exit(1)
 
 try:
     from src.modules.excel_generator import ExcelGenerator, generate_excel
-    print("✓ Excel Generator imported successfully")
+    print("[OK] Excel Generator imported successfully")
 except ImportError as e:
-    print(f"✗ Excel Generator import failed: {e}")
+    print(f"[FAIL] Excel Generator import failed: {e}")
     sys.exit(1)
 
 try:
     from src.modules.takeoff_calculator import TakeoffCalculator, calculate_takeoff
-    print("✓ Takeoff Calculator imported successfully")
+    print("[OK] Takeoff Calculator imported successfully")
 except ImportError as e:
-    print(f"✗ Takeoff Calculator import failed: {e}")
+    print(f"[FAIL] Takeoff Calculator import failed: {e}")
     sys.exit(1)
 
 try:
     from src.api.routes import api_bp
-    print("✓ API Routes imported successfully")
+    print("[OK] API Routes imported successfully")
 except ImportError as e:
-    print(f"✗ API Routes import failed: {e}")
+    print(f"[FAIL] API Routes import failed: {e}")
     sys.exit(1)
 
 # Test Takeoff Calculator
@@ -65,13 +66,13 @@ test_data = {
 
 result = calculate_takeoff(test_data)
 if result.get('success'):
-    print(f"✓ Takeoff calculation successful")
+    print(f"[OK] Takeoff calculation successful")
     print(f"  Project: {result['project_name']}")
     print(f"  Items: {result['item_count']}")
     print(f"  Subtotal: {result['subtotal']}")
     print(f"  Total: {result['total_price']}")
 else:
-    print(f"✗ Takeoff calculation failed: {result.get('error')}")
+    print(f"[FAIL] Takeoff calculation failed: {result.get('error')}")
 
 # Test Excel Generation
 print("\n=== Testing Excel Generator ===")
@@ -84,11 +85,11 @@ test_excel_data = [
 try:
     excel_file = generate_excel(test_excel_data, "Accounts Report")
     if excel_file:
-        print(f"✓ Excel file generated successfully ({excel_file.getbuffer().nbytes} bytes)")
+        print(f"[OK] Excel file generated successfully ({excel_file.getbuffer().nbytes} bytes)")
     else:
-        print("✗ Excel generation returned None")
+        print("[FAIL] Excel generation returned None")
 except Exception as e:
-    print(f"✗ Excel generation failed: {e}")
+    print(f"[FAIL] Excel generation failed: {e}")
 
 print("\n=== All Module Tests Complete ===")
 print("\nAPI Endpoints available:")
