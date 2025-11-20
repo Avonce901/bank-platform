@@ -1,0 +1,54 @@
+{
+  "transactions": [
+    {
+      "transaction_id": "TXN001",
+      "from_account": "ACC001",
+      "to_account": "ACC002",
+      "amount": 500.0,
+      "type": "transfer",
+      "description": "Payment for services",
+      "timestamp": "2025-10-25T22:53:52.346799",
+      "status": "completed"
+    },
+    {
+      "transaction_id": "TXN002",
+      "from_account": "ACC002",
+      "to_account": "ACC001",
+      "amount": 250.0,
+      "type": "transfer",
+      "description": "Refund",
+      "timestamp": "2025-10-30T22:53:52.346799",
+      "status": "completed"
+    },
+    {
+      "transaction_id": "TXN003",
+      "from_account": "ACC003",
+      "to_account": "ACC004",
+      "amount": 10000.0,
+      "type": "investment",
+      "description": "Investment deposit",
+      "timestamp": "2025-11-04T22:53:52.346799",
+      "status": "completed"
+    },
+    {
+      "transaction_id": "TXN004",
+      "from_account": "ACC001",
+      "to_account": "ACC003",
+      "amount": 1000.0,
+      "type": "payment",
+      "description": "Bill payment",
+      "timestamp": "2025-11-09T22:53:52.346799",
+      "status": "completed"
+    },
+    {
+      "transaction_id": "TXN005",
+      "from_account": "ACC002",
+      "to_account": "ACC001",
+      "amount": 750.0,
+      "type": "transfer",
+      "description": "Personal transfer",
+      "timestamp": "2025-11-14T22:53:52.346799",
+      "status": "pending"
+    }
+  ]
+}
