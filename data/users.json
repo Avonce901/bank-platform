@@ -1,31 +1,10 @@
-{
-  "users": [
-    {
-      "user_id": "USER001",
-      "username": "admin",
-      "email": "admin@bankplatform.local",
-      "role": "administrator",
-      "password_hash": "hashed_password_admin",
-      "created_at": "2025-11-19T22:53:52.348644",
-      "status": "active"
-    },
-    {
-      "user_id": "USER002",
-      "username": "john_doe",
-      "email": "john@example.com",
-      "role": "customer",
-      "password_hash": "hashed_password_john",
-      "created_at": "2025-11-19T22:53:52.348657",
-      "status": "active"
-    },
-    {
-      "user_id": "USER003",
-      "username": "jane_smith",
-      "email": "jane@example.com",
-      "role": "customer",
-      "password_hash": "hashed_password_jane",
-      "created_at": "2025-11-19T22:53:52.348659",
-      "status": "active"
-    }
-  ]
-}
+[
+  {
+    "id": 1,
+    "username": "anthony_doe",
+    "email": "anthony@banking.com",
+    "password_hash": "b926e929192ee30e047ab90fc9d1e0d811a4ccc5f0411da2047abfccc8cd8f60",
+    "role": "CUSTOMER",
+    "created_at": "2025-11-20T00:03:03.943468"
+  }
+]
