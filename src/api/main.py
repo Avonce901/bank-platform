@@ -3,7 +3,7 @@ Bank Platform API - Main Entry Point
 """
 from flask import Flask
 from flask_cors import CORS
-from src.config import Config
+from src.config.config import Config
 from src.api.routes import register_routes
 
 def create_app(config_class=Config):
