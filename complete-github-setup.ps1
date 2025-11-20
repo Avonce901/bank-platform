@@ -109,7 +109,8 @@ else {
 Write-Host "`n[5] Pushing to GitHub..." -ForegroundColor Green
 
 # Configure git credentials to use the token
-$gitUrl = "https://$($GitHubToken):x-oauth-basic@github.com/$GitHubUsername/$RepoName.git"  # Used in git push command
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Justification = 'Variable used in git command')]
+$gitUrl = "https://$($GitHubToken):x-oauth-basic@github.com/$GitHubUsername/$RepoName.git"
 Write-Host 'Connecting to repository...' -ForegroundColor Cyan
 
 try {
