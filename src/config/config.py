@@ -35,6 +35,13 @@ class Config:
     UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER', 'data/input')
     OUTPUT_FOLDER = os.getenv('OUTPUT_FOLDER', 'data/output')
     
+    # Stripe
+    STRIPE_API_KEY = os.getenv('STRIPE_API_KEY', '')
+    STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET', '')
+    
+    # Deployment
+    IS_PRODUCTION = os.getenv('DEPLOYMENT_MODE') == 'production'
+    
     # Logging
     LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO')
     LOG_FORMAT = os.getenv('LOG_FORMAT', 'json')
