@@ -45,6 +45,11 @@ class Config:
     # Logging
     LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO')
     LOG_FORMAT = os.getenv('LOG_FORMAT', 'json')
+    
+    def validate(self):
+        """Validate configuration"""
+        # Configuration validation can be added here if needed
+        pass
 
 class DevelopmentConfig(Config):
     """Development configuration"""
@@ -58,3 +63,15 @@ class TestingConfig(Config):
     """Testing configuration"""
     TESTING = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+
+
+def get_config():
+    """Get configuration based on environment"""
+    env = os.getenv('FLASK_ENV', 'development').lower()
+    
+    if env == 'production':
+        return ProductionConfig()
+    elif env == 'testing':
+        return TestingConfig()
+    else:
+        return DevelopmentConfig()

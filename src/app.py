@@ -51,7 +51,8 @@ def create_app(config=None):
     
     # Initialize database
     try:
-        db = Database(app.config['DATABASE_PATH'])
+        db_url = app.config.get('SQLALCHEMY_DATABASE_URI', 'sqlite:///banking.db')
+        db = Database(db_url)
         logger.info("Database initialized successfully")
     except Exception as e:
         logger.error(f"Database initialization failed: {e}")

@@ -1,0 +1,7 @@
+2025-11-20 17:02:35,217 - INFO - Attempting to load schema from: https://banking-platform.railway.app/openapi.json
+2025-11-20 17:02:35,224 - INFO - Schema loaded successfully
+2025-11-20 17:02:37,045 - INFO - Test passed: GET / - Status 200
+2025-11-20 17:02:38,327 - INFO - Test passed: GET /health - Status 200
+2025-11-20 17:02:40,655 - INFO - Test passed: GET /config - Status 404
+2025-11-20 17:02:41,801 - INFO - Test passed: GET /billcom/health - Status 404
+2025-11-20 17:02:41,805 - INFO - Test results saved to: schemathesis_test_results_20251120_170235.json

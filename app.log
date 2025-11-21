@@ -1,0 +1,85 @@
+2025-11-20 12:14:24,619 - __main__ - ERROR - Configuration validation failed: PLAID_CLIENT_ID and PLAID_SECRET are required when ENABLE_PLAID is True
+STRIPE_SECRET_KEY and STRIPE_PUBLISHABLE_KEY are required when ENABLE_STRIPE is True
+2025-11-20 12:14:39,334 - root - INFO - Configuration validated successfully
+2025-11-20 12:14:39,367 - src.database.schema - INFO - Database initialized: banking.db
+2025-11-20 12:14:39,367 - __main__ - INFO - Database initialized successfully
+2025-11-20 12:14:39,369 - __main__ - INFO - Bill.com integration registered
+2025-11-20 12:14:39,370 - __main__ - INFO - Flask application created - Environment: development
+2025-11-20 12:14:39,371 - __main__ - INFO - Starting application on  (e.g., /path/to/file.html):5000
+2025-11-20 12:15:06,266 - root - INFO - Configuration validated successfully
+2025-11-20 12:15:06,268 - src.database.schema - INFO - Database initialized: banking.db
+2025-11-20 12:15:06,268 - src.app - INFO - Database initialized successfully
+2025-11-20 12:15:06,270 - src.app - INFO - Bill.com integration registered
+2025-11-20 12:15:06,271 - src.app - INFO - Flask application created - Environment: development
+2025-11-20 12:15:06,314 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://localhost:5000
+2025-11-20 12:15:06,314 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-11-20 12:15:06,316 - werkzeug - INFO -  * Restarting with stat
+2025-11-20 12:15:06,686 - root - INFO - Configuration validated successfully
+2025-11-20 12:15:06,691 - src.database.schema - INFO - Database initialized: banking.db
+2025-11-20 12:15:06,691 - src.app - INFO - Database initialized successfully
+2025-11-20 12:15:06,696 - src.app - INFO - Bill.com integration registered
+2025-11-20 12:15:06,699 - src.app - INFO - Flask application created - Environment: development
+2025-11-20 12:15:06,729 - werkzeug - WARNING -  * Debugger is active!
+2025-11-20 12:15:06,732 - werkzeug - INFO -  * Debugger PIN: 497-034-621
+2025-11-20 12:16:10,302 - root - INFO - Configuration validated successfully
+2025-11-20 12:16:10,304 - src.database.schema - INFO - Database initialized: banking.db
+2025-11-20 12:16:10,304 - src.app - INFO - Database initialized successfully
+2025-11-20 12:16:10,306 - src.app - INFO - Bill.com integration registered
+2025-11-20 12:16:10,307 - src.app - INFO - Flask application created - Environment: development
+2025-11-20 12:16:10,329 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.128:5000
+2025-11-20 12:16:10,329 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-11-20 12:17:18,396 - root - INFO - Configuration validated successfully
+2025-11-20 12:17:18,399 - src.database.schema - INFO - Database initialized: banking.db
+2025-11-20 12:17:18,399 - src.app - INFO - Database initialized successfully
+2025-11-20 12:17:18,402 - src.app - INFO - Bill.com integration registered
+2025-11-20 12:17:18,403 - src.app - INFO - Flask application created - Environment: development
+2025-11-20 12:17:18,415 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-11-20 12:17:18,415 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-11-20 12:17:42,080 - root - INFO - Configuration validated successfully
+2025-11-20 12:17:42,082 - src.database.schema - INFO - Database initialized: banking.db
+2025-11-20 12:17:42,082 - src.app - INFO - Database initialized successfully
+2025-11-20 12:17:42,084 - src.app - INFO - Bill.com integration registered
+2025-11-20 12:17:42,087 - src.app - INFO - Flask application created - Environment: development
+2025-11-20 12:17:42,099 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-11-20 12:17:42,100 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-11-20 12:18:05,780 - root - INFO - Configuration validated successfully
+2025-11-20 12:18:05,782 - src.database.schema - INFO - Database initialized: banking.db
+2025-11-20 12:18:05,782 - src.app - INFO - Database initialized successfully
+2025-11-20 12:18:05,784 - src.app - INFO - Bill.com integration registered
+2025-11-20 12:18:05,786 - src.app - INFO - Flask application created - Environment: development
+2025-11-20 12:18:05,801 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-11-20 12:18:05,801 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-11-20 12:18:25,402 - root - INFO - Configuration validated successfully
+2025-11-20 12:18:25,404 - src.database.schema - INFO - Database initialized: banking.db
+2025-11-20 12:18:25,404 - src.app - INFO - Database initialized successfully
+2025-11-20 12:18:25,406 - src.app - INFO - Bill.com integration registered
+2025-11-20 12:18:25,407 - src.app - INFO - Flask application created - Environment: development
+2025-11-20 12:18:38,076 - root - INFO - Configuration validated successfully
+2025-11-20 12:18:38,078 - src.database.schema - INFO - Database initialized: banking.db
+2025-11-20 12:18:38,078 - src.app - INFO - Database initialized successfully
+2025-11-20 12:18:38,080 - src.app - INFO - Bill.com integration registered
+2025-11-20 12:18:38,081 - src.app - INFO - Flask application created - Environment: development
+2025-11-20 12:18:38,095 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-11-20 12:18:38,095 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-11-20 12:20:17,532 - root - INFO - Configuration validated successfully
+2025-11-20 12:20:17,533 - src.database.schema - INFO - Database initialized: banking.db
+2025-11-20 12:20:17,533 - src.app - INFO - Database initialized successfully
+2025-11-20 12:20:17,535 - src.app - INFO - Bill.com integration registered
+2025-11-20 12:20:17,536 - src.app - INFO - Flask application created - Environment: development
+2025-11-20 12:20:22,553 - root - INFO - Configuration validated successfully
+2025-11-20 12:20:22,555 - src.database.schema - INFO - Database initialized: banking.db
+2025-11-20 12:20:22,555 - src.app - INFO - Database initialized successfully
+2025-11-20 12:20:22,557 - src.app - INFO - Bill.com integration registered
+2025-11-20 12:20:22,558 - src.app - INFO - Flask application created - Environment: development
+2025-11-20 12:20:22,573 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-11-20 12:20:22,573 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-11-20 23:23:38,898 - src.app - ERROR - Database initialization failed: 'DATABASE_PATH'
