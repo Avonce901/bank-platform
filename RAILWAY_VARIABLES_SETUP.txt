@@ -1,0 +1,123 @@
+# ⚡ QUICK: Add Variables to Railway (2 minutes)
+
+## Step 1: Go to Railway Dashboard
+🔗 https://railway.app/dashboard
+
+---
+
+## Step 2: Select Your Project
+Click on **"beneficial-heart"** (or your project name)
+
+---
+
+## Step 3: Open Variables Tab
+
+Look for the tabs at the top. Click on **"Variables"** 
+(Alternative: Settings → Variables)
+
+---
+
+## Step 4: Add Three Variables
+
+### Variable #1
+**Name:** `DEPLOYMENT_MODE`  
+**Value:** `production`  
+Click ✅ Save
+
+### Variable #2
+**Name:** `STRIPE_API_KEY`  
+**Value:** `sk_live_` (paste your full secret key from Stripe)  
+Click ✅ Save
+
+**Where to find it:**
+1. Go to Stripe Dashboard: https://dashboard.stripe.com/
+2. Click **"Developers"** (left sidebar)
+3. Click **"API Keys"**
+4. Under **"Secret key"**, click the eye icon to reveal
+5. Click copy (it starts with `sk_live_`)
+6. Paste into Railway
+
+### Variable #3
+**Name:** `STRIPE_WEBHOOK_SECRET`  
+**Value:** `whsec_live_` (paste your full webhook secret from Stripe)  
+Click ✅ Save
+
+**Where to find it:**
+1. Go to Stripe Dashboard: https://dashboard.stripe.com/
+2. Click **"Developers"** → **"Webhooks"**
+3. Click on your webhook endpoint (the URL you saved earlier)
+4. Scroll down to **"Signing secret"**
+5. Click the eye icon to reveal
+6. Click copy (it starts with `whsec_live_`)
+7. Paste into Railway
+
+---
+
+## Step 5: Railway Auto-Redeploys
+
+Once all three variables are saved:
+- ✅ Railway detects changes
+- ✅ Railway automatically rebuilds (takes 2-3 minutes)
+- ✅ Watch the "Deployments" tab for the progress bar
+
+---
+
+## Step 6: Verify It's Live
+
+Once Railway shows ✅ green checkmark on the deployment:
+
+```bash
+python check_railway_readiness.py
+```
+
+Should show: **7/7 items ready** ✅
+
+---
+
+## What Happens After Deploy
+
+1. Production mode **ACTIVATED** 🎯
+2. Stripe **LIVE MODE** enabled 💳
+3. All financial transactions **REAL** 💰
+4. Bill.com, Plaid, Intuit integrations **ACTIVE** 📊
+
+---
+
+## ⚠️ Important Notes
+
+- **sk_live_*** = Real money Secret Key (keep private!)
+- **whsec_live_*** = Webhook signing secret (used for Stripe verification)
+- Once added, you cannot view these keys again in Railway (only at Stripe)
+- If you lose a key, generate a new one at Stripe and update Railway
+
+---
+
+## Troubleshooting
+
+**Q: I don't see a Variables tab**
+A: It's under Settings → Variables, or click "Configure" on the web service
+
+**Q: Railway isn't auto-redeploying**
+A: Try clicking "Deploy" button manually in Deployments tab
+
+**Q: I can't find my Stripe webhook secret**
+A: Make sure you're logged into the correct Stripe account and look under Developers → Webhooks
+
+**Q: Test payment still showing test mode**
+A: Wait for Railway deployment to complete (green checkmark) and refresh your app
+
+---
+
+## Ready? Follow these steps now! 👇
+
+1. Open https://railway.app/dashboard
+2. Select your project
+3. Go to Variables tab
+4. Add DEPLOYMENT_MODE = production
+5. Add STRIPE_API_KEY = sk_live_[yours]
+6. Add STRIPE_WEBHOOK_SECRET = whsec_live_[yours]
+7. Watch for deployment to complete (green ✅)
+8. Run: python check_railway_readiness.py
+
+**ETA: 5 minutes to PRODUCTION LIVE** 🚀
+
