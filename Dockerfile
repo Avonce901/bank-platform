@@ -1,8 +1,11 @@
 FROM python:3.11-slim
 
+ENV PYTHONUNBUFFERED=1 \
+    PORT=5000
+
 WORKDIR /app
 
-# Install system dependencies for building packages
+# Install system dependencies for building packages and PostgreSQL
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     g++ \
@@ -11,7 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Upgrade pip, setuptools, wheel
+# Upgrade pip and install Python dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
     pip install --no-cache-dir -r requirements.txt
@@ -19,8 +22,11 @@ RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
 # Copy application code
 COPY . .
 
-# Expose port
+# Make entrypoint script executable
+RUN chmod +x /app/entrypoint.sh
+
+# Expose port (Railway will override with $PORT)
 EXPOSE 5000
 
-# Run application with gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "4", "--timeout", "120", "src.app:app"]
+# Use entrypoint script to handle $PORT and start gunicorn
+CMD ["sh", "-c", "./entrypoint.sh"]
