@@ -2,9 +2,13 @@
 Application Configuration
 """
 import os
-from dotenv import load_dotenv
 
-load_dotenv()
+# Only load .env if it exists (for local development)
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
 
 class Config:
     """Base configuration"""
