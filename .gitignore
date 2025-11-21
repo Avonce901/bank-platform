@@ -1,50 +1,9 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-env/
-venv/
-.venv
-pip-log.txt
-pip-delete-this-directory.txt
-.tox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.log
-dist/
-build/
-*.egg-info/
-.pytest_cache/
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-.DS_Store
-
-# Environment
+__pycache__
+*.pyc
 .env
-.env.local
-.env.*.local
-
-# Data
-data/input/*
-data/output/*
-*.pdf
-*.xlsx
-*.xls
-
-# Docker
-docker-compose.override.yml
-
-# OS
-Thumbs.db
-.DS_Store
+venv
+.envrc
+node_modules
+dist
+build
+.git
