@@ -99,7 +99,9 @@ class AccountViewSet(viewsets.ModelViewSet):
                     transaction_type='transfer',
                     status='completed',
                     amount=-amount,
-                    description=f"Transfer to {receiver_account.name}",
+                    description=(
+                        f"Transfer to {receiver_account.name}"
+                    ),
                     related_account=receiver_account,
                     balance_after=sender_account.balance
                 )
@@ -109,7 +111,9 @@ class AccountViewSet(viewsets.ModelViewSet):
                     transaction_type='transfer',
                     status='completed',
                     amount=amount,
-                    description=f"Transfer from {sender_account.name}",
+                    description=(
+                        f"Transfer from {sender_account.name}"
+                    ),
                     related_account=sender_account,
                     balance_after=receiver_account.balance
                 )
@@ -187,7 +191,10 @@ class AccountViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         try:
-            stripe.api_key = getattr(settings, 'STRIPE_SECRET_KEY', '')
+            from django.conf import settings
+            stripe.api_key = getattr(
+                settings, 'STRIPE_SECRET_KEY', ''
+            )
             amount = serializer.validated_data['amount']
             stripe_token = serializer.validated_data['stripe_token']
             description = serializer.validated_data.get('description', '')
