@@ -6,7 +6,7 @@ from sqlalchemy import create_engine  # pyright: ignore
 from sqlalchemy.orm import sessionmaker, Session  # pyright: ignore
 from contextlib import contextmanager
 import os
-from src.database.models import Base, User, Account, Transaction, Ledger  # pyright: ignore
+from src.database.models import Base, User, Account, Transaction, Ledger, VirtualCard  # pyright: ignore
 
 
 class DatabaseService:
