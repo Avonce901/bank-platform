@@ -57,6 +57,22 @@ def verify_stripe_config():
 # Initialize Stripe at app startup
 stripe_ready = verify_stripe_config()
 
+# ============================================================================
+# REGISTER DEV-ONLY BLUEPRINTS
+# ============================================================================
+try:
+    import sys
+    from pathlib import Path
+    # Add project root to path for cards blueprint
+    project_root = Path(__file__).parent.parent
+    sys.path.insert(0, str(project_root))
+    
+    from cards.flask_views import cards_bp
+    app.register_blueprint(cards_bp)
+    logger.info("✓ Registered dev-only cards blueprint at /cards/*")
+except Exception as e:
+    logger.warning(f"⚠️  Could not register cards blueprint: {e}")
+
 @app.route('/health', methods=['GET'])
 def health():
     """Health check endpoint"""

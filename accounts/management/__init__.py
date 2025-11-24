@@ -1,0 +1,1 @@
+# Django-style management module
