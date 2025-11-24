@@ -185,87 +185,30 @@ REST_FRAMEWORK = {
     }
 }
 
-# Channels Configuration
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            'hosts': [(os.environ.get('REDIS_HOST', 'localhost'), int(os.environ.get('REDIS_PORT', '6379')))],
-            'capacity': 1500,
-            'expiry': 10,
-        },
-    },
-}
+# Channels Configuration - DISABLED for production simplicity
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {
+#             'hosts': [(os.environ.get('REDIS_HOST', 'localhost'), int(os.environ.get('REDIS_PORT', '6379')))],
+#         },
+#     },
+# }
 
-# Celery Configuration
-CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://localhost:6379/0')
-CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', 'redis://localhost:6379/0')
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'UTC'
-CELERY_TASK_TRACK_STARTED = True
-CELERY_TASK_TIME_LIMIT = 30 * 60
+# Celery Configuration - DISABLED for production simplicity
+# CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://localhost:6379/0')
+# CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', 'redis://localhost:6379/0')
 
-# Celery Beat Schedule
-from celery.schedules import crontab
-
-CELERY_BEAT_SCHEDULE = {
-    'reset-daily-card-limits': {
-        'task': 'accounts.tasks.reset_daily_card_limits',
-        'schedule': crontab(hour=0, minute=0),  # Run at midnight
-    },
-    'reset-monthly-card-limits': {
-        'task': 'accounts.tasks.reset_monthly_card_limits',
-        'schedule': crontab(day_of_month=1, hour=0, minute=0),  # Run first day of month
-    },
-    'check-card-limit-warnings': {
-        'task': 'accounts.tasks.check_card_limit_warnings',
-        'schedule': timedelta(hours=1),  # Run every hour
-    },
-    'check-transfer-timeout': {
-        'task': 'accounts.tasks.check_transfer_timeout',
-        'schedule': timedelta(hours=1),  # Run every hour
-    },
-    'generate-monthly-statement': {
-        'task': 'accounts.tasks.generate_monthly_statement',
-        'schedule': crontab(day_of_month=1, hour=1, minute=0),  # Run on 1st at 1 AM
-    },
-    'cleanup-expired-cards': {
-        'task': 'accounts.tasks.cleanup_expired_cards',
-        'schedule': crontab(hour=2, minute=0),  # Run at 2 AM
-    },
-    'health-check': {
-        'task': 'accounts.tasks.health_check',
-        'schedule': timedelta(minutes=5),  # Run every 5 minutes
-    },
-}
-
-# Cache Configuration
+# Cache Configuration - Use simple cache
 CACHES = {
     'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': os.environ.get('REDIS_URL', 'redis://127.0.0.1:6379/1'),
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-            'SOCKET_CONNECT_TIMEOUT': 5,
-            'SOCKET_TIMEOUT': 5,
-            'COMPRESSOR': 'django_redis.compressors.zlib.ZlibCompressor',
-        }
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
     }
 }
 
 # Email Configuration
-EMAIL_BACKEND = os.environ.get(
-    'EMAIL_BACKEND',
-    'django.core.mail.backends.console.EmailBackend' if DEBUG else 'django.core.mail.backends.smtp.EmailBackend'
-)
-EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
-EMAIL_PORT = int(os.environ.get('EMAIL_PORT', '587'))
-EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True') == 'True'
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
-DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'noreply@bankingplatform.com')
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Stripe Configuration
 STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY', '')
