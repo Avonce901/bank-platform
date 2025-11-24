@@ -211,3 +211,41 @@ class Ledger(Base):
             'description': self.description,
             'created_at': self.created_at.isoformat()
         }
+
+
+class VirtualCard(Base):
+    """Virtual Card model for development/testing wallet provisioning"""
+    __tablename__ = 'virtual_cards'
+
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    account_id = Column(String(36), ForeignKey('accounts.id'), nullable=False)
+    cardholder_name = Column(String(120), nullable=False)
+    last4 = Column(String(4), nullable=False)
+    exp_month = Column(Integer, nullable=False)
+    exp_year = Column(Integer, nullable=False)
+    status = Column(String(20), default='active')
+    provisioning_token = Column(String(255), nullable=True)
+    provisioned = Column(Boolean, default=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    # Relationships
+    account = relationship("Account", backref="virtual_cards")
+
+    def __repr__(self):
+        return f'<VirtualCard {self.last4}>'
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'account_id': self.account_id,
+            'cardholder_name': self.cardholder_name,
+            'last4': self.last4,
+            'exp_month': self.exp_month,
+            'exp_year': self.exp_year,
+            'status': self.status,
+            'provisioning_token': self.provisioning_token,
+            'provisioned': self.provisioned,
+            'created_at': self.created_at.isoformat(),
+            'updated_at': self.updated_at.isoformat()
+        }
