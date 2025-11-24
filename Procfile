@@ -1,1 +1,1 @@
-web: gunicorn -w 4 -b 0.0.0.0:$PORT wsgi:app
+web: cd django-banking-app && gunicorn banking.wsgi:application --bind 0.0.0.0:$PORT --workers 4 --timeout 120
