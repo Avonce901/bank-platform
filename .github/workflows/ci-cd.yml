@@ -19,10 +19,24 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
+    - name: Diagnostic - Show repository contents
+      run: |
+        echo "Current directory: $(pwd)"
+        echo "Repository structure:"
+        ls -la
+        echo "---"
+        echo "Checking for requirements.txt:"
+        ls -la requirements.txt || echo "ERROR: requirements.txt not found!"
+        echo "---"
+        echo "Checking for tests directory:"
+        ls -la tests/ || echo "WARNING: tests directory not found!"
+    
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
+        cache: 'pip'
+        cache-dependency-path: requirements.txt
     
     - name: Install dependencies
       run: |
