@@ -6,7 +6,7 @@ import os
 BASE_URL = os.environ.get("BASE_URL", "http://localhost:8000")
 TIMEOUT = (5, 7)
 
-def get(path="/health/"):
+def get(path="/health"):
     url = BASE_URL.rstrip("/") + path
     try:
         r = requests.get(url, timeout=TIMEOUT)
@@ -24,7 +24,7 @@ if __name__ == "__main__":
     print("🧪 API VERIFICATION TEST")
     print("============================================================")
     print(f"Base URL: {BASE_URL}")
-    resp = get("/health/")
+    resp = get("/health")
     if not resp:
         print("Health check failed. See error above.")
         sys.exit(1)

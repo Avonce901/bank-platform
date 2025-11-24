@@ -146,8 +146,20 @@ def health_check():
 from src.api.auth_routes import auth_bp
 from src.api.banking_routes import banking_bp
 
+# Import dev-only cards blueprint (safe to import - has protective checks)
+try:
+    from cards.flask_views import cards_bp
+    cards_bp_available = True
+except Exception:
+    cards_bp_available = False
+
 def register_routes(app):
     """Register all API blueprints"""
     app.register_blueprint(api_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(banking_bp)
+    
+    # Register dev-only cards blueprint if available
+    if cards_bp_available:
+        app.register_blueprint(cards_bp)
+        print("✓ Registered dev-only cards blueprint at /cards/*")

@@ -7,7 +7,7 @@ import requests
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--base", required=False, default="http://localhost:8000", help="Base URL")
-parser.add_argument("--card-ids", nargs="+", type=int, required=True, help="Card IDs to fetch payloads for")
+parser.add_argument("--card-ids", nargs="+", type=str, required=True, help="Card IDs to fetch payloads for (integers or UUIDs)")
 args = parser.parse_args()
 
 for cid in args.card_ids:
