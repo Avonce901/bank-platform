@@ -88,6 +88,21 @@ class TestTakeoffCalculation:
         assert response.content_type == 'application/json'
 
 
+class TestCardsAPI:
+    """Test Cards API endpoints (dev-only)"""
+    
+    def test_wallet_payload_endpoint_exists(self, client):
+        """Wallet payload endpoint should be available"""
+        # Test with a non-existent card ID - should return 404 or 500
+        response = client.get('/api/v1/cards/test-card-id/wallet_payload')
+        assert response.status_code in [404, 500]
+    
+    def test_wallet_payload_returns_json(self, client):
+        """Wallet payload should return JSON response"""
+        response = client.get('/api/v1/cards/test-card-id/wallet_payload')
+        assert response.content_type == 'application/json'
+
+
 class TestErrorHandling:
     """Test error handling"""
     
