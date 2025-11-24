@@ -96,7 +96,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'banking.wsgi.application'
-ASGI_APPLICATION = 'banking.asgi.application'
+# ASGI disabled - using gunicorn WSGI instead of daphne
 
 # Database
 # Simple SQLite - no external database required
