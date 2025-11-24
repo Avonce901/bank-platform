@@ -37,6 +37,7 @@ def get_wallet_payload(card_id):
             "error": "VirtualCard model or database session not available. Check imports."
         }), 500
     
+    session = None
     try:
         db_service = get_db_service()
         session = db_service.get_session()
@@ -77,6 +78,7 @@ def list_cards():
             "error": "VirtualCard model or database session not available."
         }), 500
     
+    session = None
     try:
         db_service = get_db_service()
         session = db_service.get_session()

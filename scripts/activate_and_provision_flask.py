@@ -39,6 +39,7 @@ def activate_and_provision():
     print("⚠️  Development/Test Only - DO NOT USE IN PRODUCTION\n")
     
     # Initialize database connection
+    session = None
     try:
         db_service = get_db_service()
         db_service.init_db()  # Ensure tables exist, including VirtualCard

@@ -59,6 +59,9 @@ class User(Base):
 
     # Relationships
     accounts = relationship("Account", back_populates="owner", cascade="all, delete-orphan")
+    # Note: Removed transactions_from and transactions_to relationships as they were incorrectly
+    # configured (Transaction foreign keys point to Account, not User). Access transactions via
+    # user.accounts[i].transactions_from and user.accounts[i].transactions_to instead.
 
     def __repr__(self):
         return f'<User {self.username}>'
