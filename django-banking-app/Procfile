@@ -1,0 +1,3 @@
+web: cd django-banking-app && gunicorn banking.wsgi:application --bind 0.0.0.0:$PORT --workers 4 --timeout 120
+worker: cd django-banking-app && celery -A banking worker --loglevel=info
+beat: cd django-banking-app && celery -A banking beat --loglevel=info
