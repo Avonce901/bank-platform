@@ -145,9 +145,11 @@ def health_check():
 # Import new blueprints
 from src.api.auth_routes import auth_bp
 from src.api.banking_routes import banking_bp
+from src.api.cards_routes import cards_bp
 
 def register_routes(app):
     """Register all API blueprints"""
     app.register_blueprint(api_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(banking_bp)
+    app.register_blueprint(cards_bp)

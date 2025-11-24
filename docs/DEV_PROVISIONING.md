@@ -1,0 +1,208 @@
+# Development-only: Card Provisioning Helpers
+
+⚠️ **WARNING**: These files are for development and testing only. They create simulated accounts and virtual cards and should **NOT** be used in production.
+
+## Overview
+
+This development feature set provides tools to:
+1. Activate or create three accounts with $1,000,000 balance each
+2. Create/provision simulated virtual cards for those accounts
+3. Expose a dev API endpoint that returns wallet-ready provisioning payloads
+4. Include client scripts and verification helpers
+
+## Files Added
+
+### 1. Database Model
+- **`src/database/models.py`** - Added `VirtualCard` model for card management
+
+### 2. Provisioning Script
+- **`scripts/activate_and_provision.py`** - CLI script to activate/create 3 accounts and provision virtual cards
+  - Safely creates placeholder users and accounts if needed
+  - Generates simulated provisioning tokens
+  - Can be run multiple times safely
+
+### 3. API Endpoints
+- **`src/api/cards_routes.py`** - Flask blueprint with card provisioning endpoints
+  - `GET /api/v1/cards/<card_id>/wallet_payload` - Returns wallet provisioning payload
+
+### 4. Client Scripts
+- **`scripts/provision_cards_via_api.py`** - Fetches simulated wallet payloads via API
+- **`verify_api.py`** - Hardened API verification script with timeout handling
+
+### 5. Documentation
+- **`docs/DEV_PROVISIONING.md`** - This file
+
+## Usage
+
+### Step 1: Run Database Migrations
+
+First, ensure your database schema is up to date. The `VirtualCard` model needs to be created:
+
+```bash
+# If using Alembic/database migrations
+python -c "from src.database.service import get_db_service; from src.database.models import Base; db = get_db_service(); Base.metadata.create_all(db.engine)"
+```
+
+### Step 2: Run the Provisioning Script
+
+This creates/activates accounts and provisions virtual cards:
+
+```bash
+python scripts/activate_and_provision.py
+```
+
+**Output example:**
+```
+============================================================
+🔧 DEVELOPMENT ONLY: Account & Card Provisioning
+============================================================
+✓ Created virtual card id=abc-123-def for account id=xyz-456 (token=sim-token-abc123...)
+✓ Created virtual card id=abc-124-def for account id=xyz-457 (token=sim-token-def456...)
+✓ Created virtual card id=abc-125-def for account id=xyz-458 (token=sim-token-ghi789...)
+
+✅ Processed 3 accounts. 3 virtual cards created/updated.
+Note: tokens are simulated. Real wallet provisioning requires a tokenization provider.
+
+Card IDs for API testing:
+  - Card ID: abc-123-def (last4: 1001)
+  - Card ID: abc-124-def (last4: 1002)
+  - Card ID: abc-125-def (last4: 1003)
+```
+
+### Step 3: Start Your Development Server
+
+```bash
+# Using Flask directly
+python src/api/main.py
+
+# Or using the app.py entry point
+python src/app.py
+
+# Or using gunicorn (production-like)
+gunicorn -w 4 -b 0.0.0.0:8000 wsgi:app
+```
+
+### Step 4: Verify API is Running
+
+```bash
+python verify_api.py
+```
+
+### Step 5: Fetch Wallet Payloads
+
+Use the card IDs from Step 2:
+
+```bash
+python scripts/provision_cards_via_api.py --base http://localhost:8000 --card-ids abc-123-def abc-124-def abc-125-def
+```
+
+**Output example:**
+```
+============================================================
+🔧 DEVELOPMENT ONLY: Fetching Wallet Payloads
+============================================================
+Base URL: http://localhost:8000
+Card IDs: abc-123-def, abc-124-def, abc-125-def
+
+✓ Card abc-123-def:
+  Cardholder: Test User1
+  Last4: 1001
+  Expiry: 11/2028
+  Token: sim-token-abc123...
+
+✓ Card abc-124-def:
+  Cardholder: Test User2
+  Last4: 1002
+  Expiry: 11/2028
+  Token: sim-token-def456...
+```
+
+## API Endpoint Details
+
+### GET /api/v1/cards/<card_id>/wallet_payload
+
+Returns a simulated wallet provisioning payload for the specified virtual card.
+
+**Response (200 OK):**
+```json
+{
+  "card_id": "abc-123-def",
+  "cardholder_name": "Test User1",
+  "last4": "1001",
+  "exp_month": 11,
+  "exp_year": 2028,
+  "provisioning_token": "sim-token-abc123...",
+  "wallet_instructions": "This is a simulated payload. Use real provider tokens for real wallets."
+}
+```
+
+**Error Response (404):**
+```json
+{
+  "error": "Card not found"
+}
+```
+
+## Safety Features
+
+All scripts include protective checks:
+
+1. **Non-breaking imports** - Scripts won't crash if models are in different locations
+2. **Idempotent operations** - Can be run multiple times safely
+3. **Clear error messages** - Helpful feedback when things go wrong
+4. **Development-only** - Explicitly marked as not for production use
+
+## Production Considerations
+
+⚠️ **DO NOT USE IN PRODUCTION**
+
+For real wallet provisioning, you need:
+
+1. **Real tokenization provider** integration (e.g., Stripe Issuing, Visa MDES, Mastercard MDES)
+2. **Secure key management** for card encryption
+3. **PCI-DSS compliance** for handling card data
+4. **Real authentication** and authorization
+5. **Audit logging** for all card operations
+
+The tokens generated by these scripts are **simulated** and have no real-world value.
+
+## Troubleshooting
+
+### Database Connection Issues
+
+If the provisioning script fails with database errors:
+
+```bash
+# Check database connection
+python -c "from src.database.service import get_db_service; print(get_db_service())"
+```
+
+### Import Errors
+
+If you see import errors, the models may be in different locations. Update the import paths in:
+- `scripts/activate_and_provision.py`
+- `src/api/cards_routes.py`
+
+### Port Already in Use
+
+If the API server won't start:
+
+```bash
+# Find process using port 8000
+lsof -i :8000  # macOS/Linux
+netstat -ano | findstr :8000  # Windows
+
+# Kill the process or use a different port
+python src/api/main.py  # Will use configured port from config
+```
+
+## Architecture Notes
+
+This implementation is adapted for Flask/SQLAlchemy. The original requirements were Django-specific but have been translated to:
+
+- Django management commands → Python CLI scripts
+- Django ORM → SQLAlchemy ORM  
+- Django views → Flask blueprints
+- Django URL patterns → Flask routes
+
+The functionality remains the same while fitting the existing codebase architecture.
