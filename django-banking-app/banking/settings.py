@@ -103,25 +103,21 @@ WSGI_APPLICATION = 'banking.wsgi.application'
 ASGI_APPLICATION = 'banking.asgi.application'
 
 # Database
-# Use SQLite for development, PostgreSQL for production
-if os.environ.get('USE_SQLITE', 'True') == 'True':
+# Use PostgreSQL in production, SQLite for development
+DATABASE_URL = os.environ.get('DATABASE_URL')
+
+if DATABASE_URL:
+    # Railway provides DATABASE_URL for PostgreSQL
+    import dj_database_url
+    DATABASES = {
+        'default': dj_database_url.config(default=DATABASE_URL, conn_max_age=600)
+    }
+else:
+    # Fall back to SQLite (Railway should have a volume for this)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ.get('DB_NAME', 'banking_db'),
-            'USER': os.environ.get('DB_USER', 'postgres'),
-            'PASSWORD': os.environ.get('DB_PASSWORD', 'password'),
-            'HOST': os.environ.get('DB_HOST', 'localhost'),
-            'PORT': os.environ.get('DB_PORT', '5432'),
-            'CONN_MAX_AGE': 600,
-            'ATOMIC_REQUESTS': True,
         }
     }
 
