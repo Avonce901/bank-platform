@@ -1,6 +1,6 @@
-# 🚀 Railway Deployment - Quick Start
+#  Railway Deployment - Quick Start
 
-## ⚡ One-Click Deploy (Fastest)
+##  One-Click Deploy (Fastest)
 
 ### Step 1: Link Repository to Railway
 ```bash
@@ -29,7 +29,7 @@ STRIPE_WEBHOOK_SECRET = whsec_live_[your-webhook-secret]
 
 ---
 
-## 🤖 Automated Deployment (Local)
+##  Automated Deployment (Local)
 
 ### Using Python Script (Recommended)
 ```bash
@@ -38,10 +38,10 @@ python railway-deploy.py
 ```
 
 Output shows:
-- ✅ Prerequisites verified
-- ✅ GitHub auth confirmed
-- ✅ Branch synced to remote
-- 📋 Deployment instructions
+-  Prerequisites verified
+-  GitHub auth confirmed
+-  Branch synced to remote
+-  Deployment instructions
 
 ### Using Bash Script
 ```bash
@@ -51,15 +51,15 @@ Output shows:
 
 ---
 
-## 🔄 GitHub Actions Auto-Deploy
+##  GitHub Actions Auto-Deploy
 
 Once configured, every push to `copilot/devfixdeploy` triggers:
 
-1. ✅ Code pushed to GitHub
-2. 🚀 GitHub Actions workflow runs
-3. 📋 Railway detects new commits
-4. 🔄 Auto-redeploy begins
-5. ⏳ ~5 minutes to production
+1.  Code pushed to GitHub
+2.  GitHub Actions workflow runs
+3.  Railway detects new commits
+4.  Auto-redeploy begins
+5.  ~5 minutes to production
 
 ### To Enable Auto-Deploy:
 1. Go to your GitHub repo → **Settings** → **Secrets and variables** → **Actions**
@@ -70,21 +70,21 @@ Once configured, every push to `copilot/devfixdeploy` triggers:
 
 ---
 
-## 📊 What Gets Deployed
+##  What Gets Deployed
 
 | Component | Status |
 |-----------|--------|
-| Django REST API | ✅ Ready |
-| PostgreSQL Database | ✅ Railway provides |
-| Stripe Integration | ✅ Ready |
-| Migrations | ✅ Auto-run |
-| Static Files | ✅ Configured |
-| Gunicorn WSGI | ✅ Ready |
-| Environment Config | ✅ Railway managed |
+| Django REST API |  Ready |
+| PostgreSQL Database |  Railway provides |
+| Stripe Integration |  Ready |
+| Migrations |  Auto-run |
+| Static Files |  Configured |
+| Gunicorn WSGI |  Ready |
+| Environment Config | Railway managed |
 
 ---
 
-## ✅ Verify Deployment
+##  Verify Deployment
 
 ### After Railway deployment completes:
 
@@ -101,19 +101,18 @@ python verify_production_deployment.py
 
 ---
 
-## 🔐 Security Checklist
+##  Security Checklist
 
-- ✅ Never commit `.env` file (only `.env.example`)
-- ✅ Use `DEBUG = False` in production
-- ✅ Stripe keys are live/production only
-- ✅ Django secret key is random/secure
-- ✅ ALLOWED_HOSTS configured for your domain
-- ✅ HTTPS enforced by Railway
-- ✅ Database backups: Railway auto-backup
+-  Never commit `.env` file (only `.env.example`)
+-  Use `DEBUG = False` in production
+-  Django secret key is random/secure
+-  ALLOWED_HOSTS configured for your domain
+-  HTTPS enforced by Railway
+-  Database backups: Railway auto-backup
 
 ---
 
-## 🆘 Troubleshooting
+##  Troubleshooting
 
 ### Deployment stuck?
 ```bash
@@ -142,20 +141,21 @@ git push origin copilot/devfixdeploy
 
 ---
 
-## 📋 Deployment Timeline
+##  Deployment Timeline
+
+##  Deployment Timeline
+
 
 | Step | Time | Status |
 |------|------|--------|
-| Push code to GitHub | 1 min | ✅ Done |
+| Push code to GitHub | 1 min |  Done |
 | Railway detects changes | 1 min | Automatic |
 | Pull & build Docker image | 2 min | Auto-build |
 | Run migrations | 1 min | Auto-run |
 | Health checks | 1 min | Auto-verify |
 | **Total** | **~5 min** | **Live!** |
 
----
-
-## 🎯 Next Steps
+---##  Next Steps
 
 1.  All code automated and pushed
 2.  Go to https://railway.app/dashboard
@@ -163,7 +163,7 @@ git push origin copilot/devfixdeploy
 4.  Add Stripe live API keys
 5.  Deploy!
 
-**That's it! Your banking platform will be live in ~5 minutes** 🎉
+**That's it! Your banking platform will be live in ~5 minutes** 
 
 ---
 
