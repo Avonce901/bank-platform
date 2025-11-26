@@ -1,13 +1,13 @@
 {
   "name": "bank-platform",
-  "description": "Banking Platform API with PDF extraction, Excel generation",
+  "description": "Django Banking Platform API with Stripe integration, accounts, transfers, virtual cards",
   "services": {
     "web": {
-      "build": "./src",
-      "start": "gunicorn -w 4 -b 0.0.0.0:$PORT wsgi:app",
+      "build": "./django-banking-app",
+      "start": "gunicorn -w 4 -b 0.0.0.0:$PORT banking.wsgi:application",
       "env": {
-        "FLASK_ENV": "production",
-        "DEBUG": "False"
+        "DEBUG": "False",
+        "DJANGO_SETTINGS_MODULE": "banking.settings"
       }
     }
   }

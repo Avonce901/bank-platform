@@ -1,53 +1,216 @@
-# 🚀 Railway Deployment Guide - Banking Platform
+# 🚀 Railway Deployment Guide - Django Banking Platform
 
-## Quick Start (3 minutes)
+## Overview
+Your banking platform with Stripe integration is ready for production deployment on Railway.
 
-Your banking platform is **fully automated** and ready for deployment!
-
-### ✅ What's Configured
-- ✅ Procfile - Entry point for Railway
-- ✅ runtime.txt - Python 3.11.7
-- ✅ wsgi.py - Production WSGI app
-- ✅ requirements.txt - All dependencies + gunicorn
-- ✅ GitHub repo - Synced and pushed
-
----
-
-## 🎯 Deploy Now (Choose One Method)
-
-### **METHOD 1: Railway Dashboard (Easiest - 2 mins)**
-
-1. **Visit Railway.app**
-   ```
-   https://railway.app
-   ```
-
-2. **Sign Up / Log In**
-   - Click "Start New Project"
-   - Select "Deploy from GitHub"
-   - Authorize Railway with your GitHub account
-
-3. **Select Your Repo**
-   - Search for: `Avonce901/bank-platform`
-   - Click "Deploy"
-
-4. **Wait for Build**
-   - Railway automatically detects `Procfile`
-   - Build takes ~2-3 minutes
-   - Check logs in dashboard
-
-5. **Get Your URL**
-   - Once deployed, Railway shows your URL
-   - Example: `https://bank-platform-xxxxx.railway.app`
-
-6. **Test Your API**
-   ```bash
-   curl https://your-url/health
-   # Expected: {"status": "healthy"}
-   ```
+### What's Ready
+- ✅ Django 4.2.7 REST API with Stripe payment processing
+- ✅ Accounts, transfers, virtual cards, transactions
+- ✅ SQLite (dev) / PostgreSQL (production) compatible
+- ✅ Gunicorn WSGI configured
+- ✅ requirements.txt with all dependencies
+- ✅ Environment-based settings (DEBUG, ALLOWED_HOSTS, etc.)
 
 ---
 
+## Step 1: Prepare for Deployment
+
+### 1a. Update railway.json (DONE)
+Already configured with:
+```json
+{
+  "build": "./django-banking-app",
+  "start": "gunicorn -w 4 -b 0.0.0.0:$PORT banking.wsgi:application"
+}
+```
+
+### 1b. Verify .env.example (DONE)
+Contains all required env vars (keys NOT included):
+- DJANGO_SECRET_KEY
+- STRIPE_PUBLIC_KEY, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET
+- ALLOWED_HOSTS
+- DEBUG=False
+
+---
+
+## Step 2: Deploy to Railway
+
+### Option A: Railway Dashboard (Easiest)
+
+1. **Go to [Railway.app](https://railway.app)**
+2. **Sign in / Create account**
+3. **Click "New Project" → "Deploy from GitHub"**
+4. **Select**: `Avonce901/bank-platform`
+5. **Choose branch**: `copilot/devfixdeploy` or `main`
+6. **Railway auto-detects** `railway.json` and `Procfile`
+7. **Build starts automatically** (~3-5 mins)
+
+### Option B: Railway CLI
+
+```bash
+npm install -g @railway/cli
+railway login
+railway link  # Select your project
+railway up    # Deploys current branch
+```
+
+---
+
+## Step 3: Configure Environment Variables
+
+### In Railway Dashboard:
+
+1. Go to your project → **Variables** tab
+2. **Add these (never paste secrets in code)**:
+
+```
+DEBUG=False
+DJANGO_SECRET_KEY=your-50-char-random-secret-key
+ALLOWED_HOSTS=bank-platform-xxxx.up.railway.app,yourdomain.com
+SECURE_SSL_REDIRECT=True
+SESSION_COOKIE_SECURE=True
+CSRF_COOKIE_SECURE=True
+
+STRIPE_PUBLIC_KEY=pk_live_your_public_key
+STRIPE_SECRET_KEY=sk_live_your_secret_key
+STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret
+
+CORS_ALLOWED_ORIGINS=https://bank-platform-xxxx.up.railway.app
+```
+
+**Where to get Stripe keys**:
+1. Login to [Stripe Dashboard](https://dashboard.stripe.com/apikeys)
+2. Copy `Publishable key` → `STRIPE_PUBLIC_KEY`
+3. Copy `Secret key` → `STRIPE_SECRET_KEY`
+4. Go to Webhooks → Create endpoint → Copy `Signing secret` → `STRIPE_WEBHOOK_SECRET`
+
+---
+
+## Step 4: Run Initial Migration
+
+After deployment starts, run migrations:
+
+### Option A: Railway CLI
+```bash
+railway run python django-banking-app/manage.py migrate
+```
+
+### Option B: Add to Procfile
+Add this line to trigger on each deploy:
+```
+release: cd django-banking-app && python manage.py migrate
+```
+
+---
+
+## Step 5: Create Admin User (Optional)
+
+```bash
+railway run python django-banking-app/manage.py createsuperuser
+# Enter username, email, password
+# Access admin at: https://your-domain/admin
+```
+
+---
+
+## Step 6: Test Live Endpoints
+
+Once deployed, test your API:
+
+```bash
+DOMAIN="bank-platform-xxxx.up.railway.app"
+
+# Health check
+curl https://$DOMAIN/health
+
+# List accounts (requires auth token)
+curl -H "Authorization: Token your-token" \
+  https://$DOMAIN/api/accounts/
+
+# Create payment intent
+curl -X POST https://$DOMAIN/api/payments/create_payment_intent/ \
+  -H "Authorization: Token your-token" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "amount": "50.00",
+    "description": "Test deposit"
+  }'
+```
+
+---
+
+## Step 7: Configure Stripe Webhooks
+
+For payment processing to work end-to-end:
+
+1. **Stripe Dashboard** → **Webhooks**
+2. **Add Endpoint**:
+   - URL: `https://your-domain/api/webhooks/stripe/`
+   - Events: `payment_intent.succeeded`, `charge.refunded`, `payment_method.attached`
+3. **Copy Signing Secret** → Set as `STRIPE_WEBHOOK_SECRET` in Railway
+
+---
+
+## Step 8: Enable GitHub Auto-Deploy (Optional)
+
+1. In Railway, go to **Project Settings** → **GitHub**
+2. Enable **"Auto-deploy on push"**
+3. Every push to your branch auto-deploys
+
+---
+
+## Production Security Checklist
+
+- [ ] DEBUG=False
+- [ ] DJANGO_SECRET_KEY generated and set
+- [ ] SECURE_SSL_REDIRECT=True
+- [ ] CSRF_COOKIE_SECURE=True
+- [ ] SESSION_COOKIE_SECURE=True
+- [ ] ALLOWED_HOSTS configured correctly
+- [ ] Stripe keys are **live** (not test)
+- [ ] CORS restricted to your domain only
+- [ ] Database backed up (if using PostgreSQL)
+
+---
+
+## Troubleshooting
+
+### Build Fails
+- Check logs: `railway logs`
+- Ensure `django-banking-app/` has `requirements.txt` and `banking/wsgi.py`
+
+### Import Errors
+- Verify `DJANGO_SETTINGS_MODULE=banking.settings` is set
+- Check all Stripe keys are valid
+
+### Static Files 404
+- Add to Procfile: `collectstatic: python django-banking-app/manage.py collectstatic --noinput`
+
+### Database Errors
+- First deploy: migrations run automatically via release command
+- Check Railway logs for errors
+
+---
+
+## Support
+
+- **Django Docs**: https://docs.djangoproject.com/
+- **Stripe API**: https://stripe.com/docs/api
+- **Railway Docs**: https://docs.railway.app/
+- **GitHub Issues**: Create issue in your repo
+
+---
+
+## Next Steps (After Deployment)
+
+1. ✅ **Test all endpoints** with real Stripe keys
+2. ✅ **Configure DNS** to point your domain
+3. ✅ **Set up monitoring** (Sentry, DataDog, etc.)
+4. ✅ **Enable backups** for production database
+5. ✅ **Add rate limiting** for public endpoints
+6. ✅ **Document API** for frontend team
+
+Deployment is **ready**. Your banking platform is production-grade! 🎉
 ### **METHOD 2: Railway CLI (Advanced - 5 mins)**
 
 **Step 1: Install Railway CLI**
