@@ -157,11 +157,11 @@ git push origin copilot/devfixdeploy
 
 ## 🎯 Next Steps
 
-1. ✅ All code automated and pushed
-2. 📋 Go to https://railway.app/dashboard
-3. 🔗 Link your GitHub repository
-4. 🔑 Add Stripe live API keys
-5. 🚀 Deploy!
+1.  All code automated and pushed
+2.  Go to https://railway.app/dashboard
+3.  Link your GitHub repository
+4.  Add Stripe live API keys
+5.  Deploy!
 
 **That's it! Your banking platform will be live in ~5 minutes** 🎉
 
