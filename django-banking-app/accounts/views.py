@@ -1,6 +1,6 @@
 """
 Django REST Framework Views
-Account Management, Transfers, Deposits, Virtual Cards
+Account Management, Transfers, Deposits, Virtual Cards, Stripe Payments
 """
 from rest_framework import viewsets, status, permissions
 from rest_framework.decorators import action
@@ -10,19 +10,26 @@ from rest_framework.permissions import IsAuthenticated
 from django.db import transaction
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
+from django.conf import settings
 from decimal import Decimal
 import stripe
 import logging
 
-from .models import Account, Transaction, VirtualCard, CardTransaction, Transfer
+from .models import (
+    Account, Transaction, VirtualCard, CardTransaction, Transfer,
+    StripeCustomer, PaymentMethod, StripePayment
+)
 from .serializers import (
     AccountSerializer, AccountDetailedSerializer, TransactionSerializer,
     VirtualCardSerializer, TransferSerializer, TransferCreateSerializer,
-    DepositSerializer, VirtualCardCreateSerializer, StripeDepositSerializer
+    DepositSerializer, VirtualCardCreateSerializer, StripeDepositSerializer,
+    StripePaymentSerializer, CreatePaymentIntentSerializer, StripeCustomerSerializer,
+    PaymentMethodSerializer
 )
 # Celery tasks disabled - using synchronous operations only
 
 logger = logging.getLogger(__name__)
+stripe.api_key = getattr(settings, 'STRIPE_SECRET_KEY', '')
 
 
 class AccountViewSet(viewsets.ModelViewSet):
@@ -458,9 +465,140 @@ def list_wallet_cards(request):
         cards = VirtualCard.objects.filter(status="active", provisioned=True).values(
             "id", "last4", "cardholder_name", "status"
         )
-        return JsonResponse({
+        return Response({
             "cards": list(cards),
-            "count": len(cards)
+            "count": cards.count()
         })
     except Exception as e:
-        return JsonResponse({"error": str(e)}, status=500)
+        logger.error(f"Wallet list error: {str(e)}")
+        return Response({'error': 'Failed to retrieve cards'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class StripePaymentViewSet(viewsets.ModelViewSet):
+    """Stripe payment management endpoints."""
+    serializer_class = StripePaymentSerializer
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+    def get_queryset(self):
+        """Return payments for current user's accounts."""
+        return StripePayment.objects.filter(account__user=self.request.user).order_by('-created_at')
+
+    @action(detail=False, methods=['post'])
+    def create_payment_intent(self, request):
+        """Create Stripe payment intent."""
+        serializer = CreatePaymentIntentSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            account = Account.objects.get(user=request.user, is_active=True)
+            amount = serializer.validated_data['amount']
+            description = serializer.validated_data.get('description', f'Payment for {account.name}')
+
+            # Get or create Stripe customer
+            stripe_customer, _ = StripeCustomer.objects.get_or_create(account=account)
+            if not stripe_customer.stripe_customer_id:
+                # Create customer in Stripe
+                customer = stripe.Customer.create(
+                    email=account.user.email,
+                    name=account.name,
+                    metadata={'account_id': account.id}
+                )
+                stripe_customer.stripe_customer_id = customer['id']
+                stripe_customer.save()
+
+            # Create payment intent
+            payment_intent = stripe.PaymentIntent.create(
+                amount=int(amount * 100),  # Convert to cents
+                currency='usd',
+                customer=stripe_customer.stripe_customer_id,
+                description=description,
+                metadata={'account_id': account.id}
+            )
+
+            # Store payment record
+            payment = StripePayment.objects.create(
+                account=account,
+                stripe_payment_intent_id=payment_intent['id'],
+                amount=amount,
+                currency='usd',
+                status=payment_intent['status'],
+                description=description
+            )
+
+            return Response({
+                'client_secret': payment_intent['client_secret'],
+                'payment_intent_id': payment_intent['id'],
+                'amount': float(amount),
+                'currency': 'usd'
+            }, status=status.HTTP_201_CREATED)
+
+        except Account.DoesNotExist:
+            return Response({'error': 'No active account found'}, status=status.HTTP_400_BAD_REQUEST)
+        except stripe.error.StripeError as e:
+            logger.error(f"Stripe error: {str(e)}")
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            logger.error(f"Payment intent error: {str(e)}")
+            return Response({'error': 'Failed to create payment intent'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    @action(detail=False, methods=['post'])
+    def confirm_payment(self, request):
+        """Confirm and process Stripe payment."""
+        payment_intent_id = request.data.get('payment_intent_id')
+        if not payment_intent_id:
+            return Response({'error': 'payment_intent_id required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            payment = StripePayment.objects.get(stripe_payment_intent_id=payment_intent_id)
+            if payment.account.user != request.user:
+                return Response({'error': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
+
+            # Retrieve payment intent from Stripe
+            payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
+
+            if payment_intent['status'] == 'succeeded':
+                # Get charge ID if available
+                if payment_intent['charges']['data']:
+                    charge = payment_intent['charges']['data'][0]
+                    payment.stripe_charge_id = charge['id']
+                    payment.receipt_url = charge.get('receipt_url', '')
+
+                # Credit account
+                with transaction.atomic():
+                    payment.account.balance += payment.amount
+                    payment.account.save()
+                    payment.status = 'succeeded'
+                    payment.save()
+
+                    # Create transaction record
+                    Transaction.objects.create(
+                        account=payment.account,
+                        transaction_type='deposit',
+                        status='completed',
+                        amount=payment.amount,
+                        description=f'Stripe payment: {payment.description}',
+                        balance_after=payment.account.balance
+                    )
+
+                serializer = StripePaymentSerializer(payment)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                payment.status = payment_intent['status']
+                payment.save()
+                return Response({'error': f'Payment not ready: {payment_intent["status"]}'}, status=status.HTTP_400_BAD_REQUEST)
+
+        except StripePayment.DoesNotExist:
+            return Response({'error': 'Payment intent not found'}, status=status.HTTP_404_NOT_FOUND)
+        except stripe.error.StripeError as e:
+            logger.error(f"Stripe error: {str(e)}")
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['get'])
+    def list_payments(self, request):
+        """List user's payment history."""
+        payments = self.get_queryset()
+        serializer = StripePaymentSerializer(payments, many=True)
+        return Response(serializer.data)
+

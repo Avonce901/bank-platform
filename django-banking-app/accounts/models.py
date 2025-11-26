@@ -139,3 +139,67 @@ class CardTransaction(models.Model):
 
     def __str__(self):
         return f"{self.merchant} - {self.amount}"
+
+
+class StripeCustomer(models.Model):
+    """Link between Django user and Stripe customer ID."""
+    account = models.OneToOneField(Account, on_delete=models.CASCADE, related_name='stripe_customer')
+    stripe_customer_id = models.CharField(max_length=255, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Stripe: {self.stripe_customer_id}"
+
+
+class PaymentMethod(models.Model):
+    """Store Stripe payment method references."""
+    TYPE_CHOICES = (
+        ('card', 'Card'),
+        ('bank_account', 'Bank Account'),
+        ('apple_pay', 'Apple Pay'),
+        ('google_pay', 'Google Pay'),
+    )
+
+    stripe_customer = models.ForeignKey(StripeCustomer, on_delete=models.CASCADE, related_name='payment_methods')
+    stripe_payment_method_id = models.CharField(max_length=255, unique=True)
+    payment_type = models.CharField(max_length=32, choices=TYPE_CHOICES, default='card')
+    last4 = models.CharField(max_length=4, blank=True)
+    brand = models.CharField(max_length=32, blank=True)  # visa, mastercard, amex, etc.
+    is_default = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.brand} •••• {self.last4}"
+
+
+class StripePayment(models.Model):
+    """Record of payments processed via Stripe."""
+    STATUS_CHOICES = (
+        ('pending', 'Pending'),
+        ('succeeded', 'Succeeded'),
+        ('failed', 'Failed'),
+        ('refunded', 'Refunded'),
+    )
+
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='stripe_payments')
+    payment_method = models.ForeignKey(PaymentMethod, on_delete=models.SET_NULL, null=True, blank=True)
+    stripe_payment_intent_id = models.CharField(max_length=255, unique=True)
+    stripe_charge_id = models.CharField(max_length=255, blank=True)
+    amount = models.DecimalField(max_digits=14, decimal_places=2)
+    currency = models.CharField(max_length=3, default='usd')
+    status = models.CharField(max_length=32, choices=STATUS_CHOICES, default='pending')
+    description = models.TextField(blank=True)
+    receipt_url = models.URLField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Stripe {self.stripe_charge_id or self.stripe_payment_intent_id} - {self.amount}"

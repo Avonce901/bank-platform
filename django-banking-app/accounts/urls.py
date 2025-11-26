@@ -6,13 +6,16 @@ from .views import (
     VirtualCardViewSet,
     TransferViewSet,
     TransactionViewSet,
+    StripePaymentViewSet,
 )
+app_name = 'accounts-api'
 
 router = DefaultRouter()
 router.register(r'accounts', AccountViewSet, basename='accounts')
 router.register(r'cards', VirtualCardViewSet, basename='cards')
 router.register(r'transfers', TransferViewSet, basename='transfers')
 router.register(r'transactions', TransactionViewSet, basename='transactions')
+router.register(r'payments', StripePaymentViewSet, basename='payments')
 
 urlpatterns = [
     path('', include(router.urls)),

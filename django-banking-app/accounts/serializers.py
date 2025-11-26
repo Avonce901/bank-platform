@@ -7,6 +7,9 @@ from .models import (
     VirtualCard,
     Transfer,
     CardTransaction,
+    StripeCustomer,
+    PaymentMethod,
+    StripePayment,
 )
 
 
@@ -135,3 +138,51 @@ class CardTransactionSerializer(serializers.ModelSerializer):
             'id', 'card', 'card_holder', 'amount', 'merchant', 'status', 'description', 'created_at'
         )
         read_only_fields = ('id', 'created_at')
+
+
+class PaymentMethodSerializer(serializers.ModelSerializer):
+    """Serialize Stripe payment method."""
+    class Meta:
+        model = PaymentMethod
+        fields = (
+            'id', 'stripe_payment_method_id', 'payment_type', 'last4', 'brand',
+            'is_default', 'created_at'
+        )
+        read_only_fields = ('id', 'stripe_payment_method_id', 'created_at')
+
+
+class StripePaymentSerializer(serializers.ModelSerializer):
+    """Serialize Stripe payment record."""
+    payment_method = PaymentMethodSerializer(read_only=True)
+
+    class Meta:
+        model = StripePayment
+        fields = (
+            'id', 'stripe_payment_intent_id', 'stripe_charge_id', 'amount', 'currency',
+            'status', 'description', 'receipt_url', 'payment_method', 'created_at'
+        )
+        read_only_fields = (
+            'id', 'stripe_payment_intent_id', 'stripe_charge_id', 'receipt_url', 'created_at'
+        )
+
+
+class CreatePaymentIntentSerializer(serializers.Serializer):
+    """Create Stripe payment intent."""
+    amount = serializers.DecimalField(max_digits=14, decimal_places=2)
+    payment_method_id = serializers.CharField(required=False, allow_blank=True)
+    description = serializers.CharField(required=False, allow_blank=True)
+
+    def validate_amount(self, value):
+        if value <= 0:
+            raise serializers.ValidationError('Amount must be greater than zero')
+        return value
+
+
+class StripeCustomerSerializer(serializers.ModelSerializer):
+    """Serialize Stripe customer link."""
+    payment_methods = PaymentMethodSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = StripeCustomer
+        fields = ('id', 'stripe_customer_id', 'payment_methods', 'created_at')
+        read_only_fields = ('id', 'stripe_customer_id', 'created_at')

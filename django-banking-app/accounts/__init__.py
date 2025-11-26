@@ -1,1 +1,3 @@
-# accounts app package initialization
+"""Accounts app package initializer."""
+
+default_app_config = 'accounts.apps.AccountsConfig'
